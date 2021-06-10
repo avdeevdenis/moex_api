@@ -5,3 +5,5 @@ src/**/*.js
 src/data/**/*.json
 
 node_modules/
+
+.env

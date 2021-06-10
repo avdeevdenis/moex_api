@@ -1,17 +1,28 @@
-import { STOCK_PRICES_TODAY_PATH } from "../save_share_prices/stocks_common_params";
+// https://stackoverflow.com/questions/65289566/node-telegram-bot-api-deprecated-automatic-enabling-of-cancellation-of-promises
+process.env.NTBA_FIX_319 = '1';
 
-const fs = require('fs');
+require('dotenv').config();
 
-(async () => {
-    const fileData = await fs.readFileSync(STOCK_PRICES_TODAY_PATH, { encoding: 'utf8' });
+import { getChangesFromDayStart } from './helpers/getChangesFromDayStart';
+import { sendChangesTelegramNotification } from './helpers/sendChangesTelegramNotification';
 
-    let fileDataJSON;
+/**
+ * Функциональность следующая - проверяем изменение цены каждой конкретно акции, и если
+ * - стоимость акции увеличилась/уменьшилась на определенный процент за определенное время - сигнализировать
+ */
+export default async () => {
+  // Смотрим изменение цен с начала дня
+  const dayStartChanges = await getChangesFromDayStart();
 
-    try {
-        fileDataJSON = JSON.parse(fileData);
-    } catch (_) { }
+  // Смотрим изменение цен с начала недели
+  // TODO ADD
+  // const weekStartChanges = await getChangesFromWeekStart();
 
-    if (!fileData) return;
+  /**
+   * Если есть хоть какие-нибудь отклонения на графиках (с начала дня, недели, за неделю суммарно), тогда
+   * отправляем оповещения в телеграме о росте котировок
+   */
+  await sendChangesTelegramNotification({ dayStartChanges });
 
-    console.log(fileDataJSON);
-})();
+  console.log('OK');
+};
