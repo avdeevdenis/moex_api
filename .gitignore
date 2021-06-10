@@ -1,0 +1,7 @@
+# Transpiled ts->js files
+src/**/*.js
+
+# Saved raw data
+src/data/**/*.json
+
+node_modules/

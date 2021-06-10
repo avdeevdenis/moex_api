@@ -1,0 +1,23 @@
+{
+  "name": "moex_api",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "tsc --watch",
+    "stocks:save_share_prices": "NODE_ENV=dev node src/server/save_share_prices/index.js",
+    "stocks:check_difference_in_share_prices": "NODE_ENV=dev node src/server/check_difference_in_share_prices/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "forever": "^4.0.0",
+    "fs": "0.0.1-security",
+    "node-cron": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  }
+}
