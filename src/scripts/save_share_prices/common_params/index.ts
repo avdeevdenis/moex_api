@@ -3,6 +3,7 @@ import { getStockPricesTodayFileName } from '../helpers/get_stock_prices_today_f
 import {
   IAvaliableTickerName,
   IAvaliableTickerNameForForeignMarket,
+  IAvaliableTickerNameForFundMarket,
   IAvaliableTickerNameForRussianMarket,
   IRecievedFieldsFromApiSequrence,
 } from '../typings';
@@ -40,12 +41,17 @@ export const SAVE_SHARE_PRICES_TODAY_LOG_PATH = 'src/logs/save_share_prices/' + 
 export const CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH = 'src/logs/check_difference_in_share_prices/' + STOCK_PRICES_TODAY_FILENAME + '.txt';
 
 /**
- * Возвращает информацию о всех тикерах на Московской бирже
+ * Возвращает информацию о всех тикерах акций на Московской бирже
  */
 export const MOEX_API_STOCKS_SECURITIES_HOST = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json';
 
 /**
- * Возвращает информацию о всех тикерах зарубежных компаний
+ * Возвращает информацию о всех тикерах фондов на Московской бирже
+ */
+export const MOEX_API_FUND_STOCKS_SECURITIES_HOST = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQTD/securities.json';
+
+/**
+ * Возвращает информацию о всех тикерах акций зарубежных компаний
  */
 export const MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST = 'https://iss.moex.com/iss/engines/stock/markets/foreignshares/boards/FQBR/securities.json' as const;
 
@@ -61,7 +67,7 @@ export const REQUIRED_FILEDS_RECIEVED_FROM_API: IRecievedFieldsFromApiSequrence 
 /**
  * Возвращает полный URL для запроса в MOEX API за информацией по тикерам
  */
-export const GET_MOEX_API_URL_WITH_PARAMS = (host: typeof MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST | typeof MOEX_API_STOCKS_SECURITIES_HOST) => {
+export const GET_MOEX_API_URL_WITH_PARAMS = (host: typeof MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST | typeof MOEX_API_STOCKS_SECURITIES_HOST | typeof MOEX_API_FUND_STOCKS_SECURITIES_HOST) => {
   return host +
     '?iss.meta=off' +
     '&iss.only=marketdata' +
@@ -91,13 +97,32 @@ export const REQUIRED_TICKERS_FOR_RUSSIAN_COMPANIES: IAvaliableTickerNameForRuss
   'GAZP',
   'MOEX',
   'NLMK',
+  'OZON',
   'POLY',
   'SBER',
   'CHMF',
   'PHOR',
 ];
 
+/**
+ * Тикеры Фондов, информацию по которым хотим получить
+ */
+export const REQUIRED_TICKERS_FOR_FUNDS: IAvaliableTickerNameForFundMarket[] = [
+  'TSPX',
+  'FXDM',
+  'TGLD',
+  'FXGD',
+  'TECH',
+  'TIPO',
+  'TMOS',
+  'TBIO',
+  'FXTP',
+  'FXIM',
+  'FXWO',
+];
+
 export const ALL_REQUIRED_TICKER_NAMES: IAvaliableTickerName[] = [
   ...REQUIRED_TICKERS_FOR_RUSSIAN_COMPANIES,
-  ...REQUIRED_TICKERS_FOR_FOREIGN_COMPANIES
+  ...REQUIRED_TICKERS_FOR_FOREIGN_COMPANIES,
+  ...REQUIRED_TICKERS_FOR_FUNDS,
 ];

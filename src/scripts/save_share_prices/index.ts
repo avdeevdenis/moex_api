@@ -14,14 +14,14 @@ export default async () => {
   const responseDataFromAPI = await getResponseDataFromAPI();
   if (!responseDataFromAPI) return;
 
-  const { stocksResponseData, stocksForeignResponseData, columns } = responseDataFromAPI;
+  const { stocksResponseData, stocksForeignResponseData, stocksFundsResponseData, columns } = responseDataFromAPI;
 
   // 2. Фильтруем из всех бумаг только те, информацию по которым получить необходимо
-  const requiredStocksData = await getFilteredOnlyRequiredStocksData(stocksResponseData, stocksForeignResponseData);
+  const requiredStocksData = await getFilteredOnlyRequiredStocksData({ stocksResponseData, stocksForeignResponseData, stocksFundsResponseData });
 
   // 3. Преобразуем массив с последовательными данными в массив с объектами с понятными ключами
   const requiredStocksDataWithColumnNames = getRequiredStocksDataWithColumnNames(requiredStocksData, columns);
-
+  
   // 4. Полученный массив считаем полным и достаточным для записи в файл, далее происходит мерж полученного массива с имеющимся (если таковой имеется)
   const isSaved = await mergeStocksDataIntoFile(requiredStocksDataWithColumnNames);
 

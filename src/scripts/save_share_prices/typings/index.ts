@@ -8,7 +8,8 @@ export type IAvaliableTickerNameForRussianMarket =
   'POLY' |
   'SBER' |
   'CHMF' |
-  'PHOR';
+  'PHOR' |
+  'OZON';
 
 export type IAvaliableTickerNameForForeignMarket =
   'SPCE-RM' |
@@ -19,7 +20,20 @@ export type IAvaliableTickerNameForForeignMarket =
   'XOM-RM' |
   'VZ-RM';
 
-export type IAvaliableTickerName = IAvaliableTickerNameForRussianMarket | IAvaliableTickerNameForForeignMarket;
+export type IAvaliableTickerNameForFundMarket =
+  'TSPX' |
+  'FXDM' |
+  'TGLD' |
+  'FXGD' |
+  'TECH' |
+  'TIPO' |
+  'TMOS' |
+  'TBIO' |
+  'FXTP' |
+  'FXIM' |
+  'FXWO';
+
+export type IAvaliableTickerName = IAvaliableTickerNameForRussianMarket | IAvaliableTickerNameForForeignMarket | IAvaliableTickerNameForFundMarket;
 
 export type IRecievedFieldsFromApi =
   'SECID' |

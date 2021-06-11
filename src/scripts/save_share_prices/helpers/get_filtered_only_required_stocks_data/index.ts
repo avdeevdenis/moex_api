@@ -13,14 +13,23 @@ const arrayToObject = (array) => {
 /**
  * Фильтруем из всех бумаг только те, информацию по которым получить необходимо
  */
-export const getFilteredOnlyRequiredStocksData = async (stocksData: IStocksResponseMarketData, stocksForeignData: IStocksResponseMarketData) => {
+export const getFilteredOnlyRequiredStocksData = async ({
+  stocksResponseData,
+  stocksForeignResponseData,
+  stocksFundsResponseData,
+}: {
+  stocksResponseData: IStocksResponseMarketData
+  stocksForeignResponseData: IStocksResponseMarketData,
+  stocksFundsResponseData: IStocksResponseMarketData,
+}) => {
   /**
    * Создаем объекты с ключами в виде тикеров для облегчения дальнейшей обработки
    */
   const responseDataObject = Object.assign(
     {},
-    arrayToObject(stocksData.data),
-    arrayToObject(stocksForeignData.data)
+    arrayToObject(stocksResponseData.data),
+    arrayToObject(stocksForeignResponseData.data),
+    arrayToObject(stocksFundsResponseData.data),
   );
 
   const noFoundTickers = [];
