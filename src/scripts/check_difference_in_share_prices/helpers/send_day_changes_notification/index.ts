@@ -32,7 +32,13 @@ export const sendDayChangesNotification = async (changesData) => {
     return messageTemplate(tickerName, changeAction, changeValue, sticker);
   });
 
-  const sendTelegramMessagePromises = changeMessagesForTelegram.map(sendTelegramMessage);
+  const sendTelegramMessagePromises = changeMessagesForTelegram
+    .map(changeMessage => sendTelegramMessage(
+      changeMessage,
+      async (messageText) => {
+        await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, `[check_difference_in_share_prices] sendTelegramMessage. ${messageText}`);
+      }
+    ));
 
   return Promise.all([...sendTelegramMessagePromises]);
 };

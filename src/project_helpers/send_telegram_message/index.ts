@@ -4,7 +4,7 @@ import { AVDEEV_DENIS_ID } from '../telegram_configs';
 /**
  * Отправляет сообщение с текстом 'messageText' в телеграме
  */
-export const sendTelegramMessage = async (messageText: string) => {
+export const sendTelegramMessage = async (messageText: string, callback?: (messageText: string) => void) => {
   const messageData = [
     AVDEEV_DENIS_ID,
     messageText, {
@@ -14,7 +14,15 @@ export const sendTelegramMessage = async (messageText: string) => {
 
   return new Promise(resolve => {
     AvdeevStocksBot.sendMessage(...messageData)
-      .then(resolve)
-      .catch(resolve);
+      .then(() => {
+        resolve(true);
+
+        callback && callback(messageText);
+      })
+      .catch(() => {
+        resolve(true);
+
+        callback && callback(messageText);
+      });
   });
 };
