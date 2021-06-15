@@ -70,7 +70,11 @@ const combineStocksDataWithFileData = (stocksData: IStocksMarketItemObject[], fi
     if (lasValueDataTime !== restItemData.TIME || !value) {
       debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, `[save_share_prices] combineStocksDataWithFileData update value '${SECID}'.`);
 
-      tickerValuesArray.push(restItemData);
+      if (tickerValuesArray.length >= 2) {
+        tickerValuesArray[tickerValuesArray.length - 1] = restItemData;
+      } else {
+        tickerValuesArray.push(restItemData);
+      }
     }
   });
 
