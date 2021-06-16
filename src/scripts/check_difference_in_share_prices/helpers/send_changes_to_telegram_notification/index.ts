@@ -1,5 +1,5 @@
 import { debug_log } from '../../../../project_helpers/debug_log';
-import { CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../../../save_share_prices/common_params';
+import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../../../save_share_prices/common_params';
 import { saveNotificationStateToStocksDataFile } from '../save_notification_state_to_stocks_data_file';
 import { sendDayChangesNotification } from '../send_day_changes_notification';
 
@@ -9,7 +9,7 @@ import { sendDayChangesNotification } from '../send_day_changes_notification';
  */
 // TODO ADD WEEKLY AND MONTHLY
 export const sendChangesToTelegramNotification = async ({ dayStartChanges }) => {
-  await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] sendChangesToTelegramNotification start.');
+  await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] sendChangesToTelegramNotification start.');
 
   const hasDayStartChanges = dayStartChanges && dayStartChanges.length;
 
@@ -17,7 +17,7 @@ export const sendChangesToTelegramNotification = async ({ dayStartChanges }) => 
     // Отправляем оповещения в телеграме
     await sendDayChangesNotification(dayStartChanges);
 
-    await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] sendDayChangesNotification end.');
+    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] sendDayChangesNotification end.');
 
     // Записываем флаг в файл с котировками, чтобы не отправлять эти оповещения повторно
     await saveNotificationStateToStocksDataFile(dayStartChanges);

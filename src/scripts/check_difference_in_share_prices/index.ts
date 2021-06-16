@@ -4,7 +4,7 @@ process.env.NTBA_FIX_319 = '1';
 require('dotenv').config();
 
 import { debug_log } from '../../project_helpers/debug_log';
-import { CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../save_share_prices/common_params';
+import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../save_share_prices/common_params';
 import { getChangesFromDayStart } from './helpers/get_changes_from_day_start';
 import { sendChangesToTelegramNotification } from './helpers/send_changes_to_telegram_notification';
 
@@ -13,7 +13,7 @@ import { sendChangesToTelegramNotification } from './helpers/send_changes_to_tel
  * - стоимость акции увеличилась/уменьшилась на определенный процент за определенное время - сигнализировать
  */
 export default async () => {
-  await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] Start.', {
+  await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] Start.', {
     isFirstLogMessage: true
   });
 
@@ -30,5 +30,5 @@ export default async () => {
    */
   await sendChangesToTelegramNotification({ dayStartChanges });
 
-  await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] End.');
+  await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] End.');
 };

@@ -1,5 +1,5 @@
 import { saveDataToFile } from '../../../../project_helpers/save_data_to_file';
-import { SAVE_SHARE_PRICES_TODAY_LOG_PATH, SERVER_DIR, STOCK_PRICES_BY_DATE_DATA_DIR_NAME, STOCK_PRICES_TODAY_PATH } from '../../common_params';
+import { GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH, SERVER_DIR, STOCK_PRICES_BY_DATE_DATA_DIR_NAME, GET_STOCK_PRICES_TODAY_PATH } from '../../common_params';
 import { IStocksMarketItemObject } from '../../typings';
 import { createDirIfNotExits } from '../../../../project_helpers/create_dir_if_not_exists';
 import { createFileIfNotExists } from '../../../../project_helpers/create_file_if_not_exists';
@@ -26,14 +26,14 @@ export const mergeStocksDataIntoFile = async (stocksData: IStocksMarketItemObjec
   // Объединяем данные из файла с данными полученными
   const combinedStocksData = combineStocksDataWithFileData(stocksData, fileDataJSON);
 
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] mergeStocksDataIntoFile save JSON data start.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] mergeStocksDataIntoFile save JSON data start.');
 
   // Записываем объединенные данные в файл
-  const isSaved = await saveDataToFile(JSON.stringify(combinedStocksData), STOCK_PRICES_TODAY_PATH, async (error: Error) => {
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] mergeStocksDataIntoFile saveDataToFile error.' + error.message);
+  const isSaved = await saveDataToFile(JSON.stringify(combinedStocksData), GET_STOCK_PRICES_TODAY_PATH(), async (error: Error) => {
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] mergeStocksDataIntoFile saveDataToFile error.' + error.message);
   });
 
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] mergeStocksDataIntoFile save JSON data end.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] mergeStocksDataIntoFile save JSON data end.');
 
   return isSaved;
 };
@@ -68,7 +68,7 @@ const combineStocksDataWithFileData = (stocksData: IStocksMarketItemObject[], fi
      * По каким-то причинам может не быть значения котировок 'LAST', в таком случае не записываем тоже
      */
     if (lasValueDataTime !== restItemData.TIME || !value) {
-      debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, `[save_share_prices] combineStocksDataWithFileData update value '${SECID}'.`);
+      debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), `[save_share_prices] combineStocksDataWithFileData update value '${SECID}'.`);
 
       if (tickerValuesArray.length >= 2) {
         tickerValuesArray[tickerValuesArray.length - 1] = restItemData;
@@ -82,9 +82,9 @@ const combineStocksDataWithFileData = (stocksData: IStocksMarketItemObject[], fi
 }
 
 const getFileDataJSON = async () => {
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] getFileDataJSON start.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] getFileDataJSON start.');
 
-  const fileData = await fs.readFileSync(STOCK_PRICES_TODAY_PATH, { encoding: 'utf8' });
+  const fileData = await fs.readFileSync(GET_STOCK_PRICES_TODAY_PATH(), { encoding: 'utf8' });
 
   let fileDataJSON = null;
 
@@ -92,31 +92,31 @@ const getFileDataJSON = async () => {
     fileDataJSON = JSON.parse(fileData);
   } catch (error) {
     fileDataJSON = {};
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] getFileDataJSON error.' + error.message);
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] getFileDataJSON error.' + error.message);
   }
 
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] getFileDataJSON end.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] getFileDataJSON end.');
 
   return fileDataJSON;
 };
 
 const createStocksDataFileIfNotExits = async () => {
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] createStocksDataFileIfNotExits start.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] createStocksDataFileIfNotExits start.');
 
   // Проверяем существует ли корневая папка с данными
   await createDirIfNotExits(SERVER_DIR, async (error: Error) => {
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] createStocksDataFileIfNotExits SERVER_DIR error.' + error.message);
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] createStocksDataFileIfNotExits SERVER_DIR error.' + error.message);
   });
 
   // Проверяем существует ли корневая папка с данными для сохранения информации по акциям
   await createDirIfNotExits(STOCK_PRICES_BY_DATE_DATA_DIR_NAME, async (error: Error) => {
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] createStocksDataFileIfNotExits STOCK_PRICES_BY_DATE_DATA_DIR_NAME error.' + error.message);
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] createStocksDataFileIfNotExits STOCK_PRICES_BY_DATE_DATA_DIR_NAME error.' + error.message);
   });
 
   // Проверяем существует ли файл с информацией по акциям для текущего дня
-  await createFileIfNotExists(STOCK_PRICES_TODAY_PATH, async (error: Error) => {
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] createStocksDataFileIfNotExits STOCK_PRICES_TODAY_PATH error.' + error.message);
+  await createFileIfNotExists(GET_STOCK_PRICES_TODAY_PATH(), async (error: Error) => {
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] createStocksDataFileIfNotExits GET_STOCK_PRICES_TODAY_PATH() error.' + error.message);
   });
 
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] createStocksDataFileIfNotExits end.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] createStocksDataFileIfNotExits end.');
 };

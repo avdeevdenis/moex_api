@@ -5,7 +5,7 @@ import {
   MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST,
   MOEX_API_FUND_STOCKS_SECURITIES_HOST,
   MOEX_API_STOCKS_SECURITIES_HOST,
-  SAVE_SHARE_PRICES_TODAY_LOG_PATH
+  GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH
 } from '../../common_params';
 import { IRecievedFieldsFromApiSequrence } from '../../typings';
 
@@ -13,7 +13,7 @@ import { IRecievedFieldsFromApiSequrence } from '../../typings';
  * Отправляет GET-запроc в MOEX API и получаем ответ по бумагам Российских эмитентов и второй запрос - зарубежных
  */
 export const getResponseDataFromAPI = async () => {
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] getResponseDataFromAPI start.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] getResponseDataFromAPI start.');
 
   const stocksUrl = GET_MOEX_API_URL_WITH_PARAMS(MOEX_API_STOCKS_SECURITIES_HOST);
   const stocksForeignUrl = GET_MOEX_API_URL_WITH_PARAMS(MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST);
@@ -25,7 +25,7 @@ export const getResponseDataFromAPI = async () => {
     axios.get(stocksFundsUrl)
   ]);
 
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] getResponseDataFromAPI ok.');
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] getResponseDataFromAPI ok.');
 
   const stocksResponseData = (
     stocksResponse &&
@@ -52,7 +52,7 @@ export const getResponseDataFromAPI = async () => {
   );
 
   if (!stocksResponseData || !stocksForeignResponseData || !stocksFundsResponseData || !columns) {
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] getResponseDataFromAPI invalid response from API.');
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] getResponseDataFromAPI invalid response from API.');
     return;
   }
 

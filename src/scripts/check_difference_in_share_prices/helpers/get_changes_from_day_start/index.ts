@@ -1,5 +1,5 @@
 import { debug_log } from '../../../../project_helpers/debug_log';
-import { CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, STOCK_PRICES_TODAY_PATH } from '../../../save_share_prices/common_params';
+import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, GET_STOCK_PRICES_TODAY_PATH } from '../../../save_share_prices/common_params';
 import { IAvaliableTickerName } from '../../../save_share_prices/typings';
 import { getPercentageDiff } from '../get_percentage_diff';
 
@@ -31,6 +31,10 @@ const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInf
    */
   const isSignificantValue = Math.abs(stockPercentageDiff) - SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY >= 0;
 
+  if (isSignificantValue) {
+    debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] checkDayChangesForOneTicker firstData=' + JSON.stringify(firstData) + ' recentData=' + JSON.stringify(recentData));
+  }
+
   return {
     tickerName,
     isSignificantValue,
@@ -39,14 +43,14 @@ const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInf
 };
 
 export const getChangesFromDayStart = async () => {
-  await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] getChangesFromDayStart start.');
+  await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), `[check_difference_in_share_prices] getChangesFromDayStart start from file '${GET_STOCK_PRICES_TODAY_PATH()}'.`);
 
   let fileData;
 
   try {
-    fileData = await fs.readFileSync(STOCK_PRICES_TODAY_PATH, { encoding: 'utf8' });
+    fileData = await fs.readFileSync(GET_STOCK_PRICES_TODAY_PATH(), { encoding: 'utf8' });
   } catch (error) {
-    await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] getChangesFromDayStart readFileSync error.' + error.message);
+    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart readFileSync error.' + error.message);
   }
 
   let fileDataJSON;
@@ -54,12 +58,12 @@ export const getChangesFromDayStart = async () => {
   try {
     fileDataJSON = JSON.parse(fileData);
   } catch (error) {
-    await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] getChangesFromDayStart JSON.parse error.' + error.message);
+    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart JSON.parse error.' + error.message);
   }
 
   if (!fileDataJSON) return;
 
-  await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] getChangesFromDayStart ok.');
+  await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart ok.');
 
   const percentageDiffData = Object.keys(fileDataJSON).map((tickerName: IAvaliableTickerName) => {
     return checkDayChangesForOneTicker(tickerName, fileDataJSON[tickerName]);
@@ -72,7 +76,7 @@ export const getChangesFromDayStart = async () => {
 
   if (!significantDiffData.length) return;
 
-  await debug_log(CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, '[check_difference_in_share_prices] getChangesFromDayStart significantDiffData has.');
+  await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart significantDiffData has.');
 
   return significantDiffData;
 };

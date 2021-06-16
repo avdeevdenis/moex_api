@@ -1,5 +1,5 @@
 import { debug_log } from '../../../../project_helpers/debug_log';
-import { ALL_REQUIRED_TICKER_NAMES, SAVE_SHARE_PRICES_TODAY_LOG_PATH } from '../../common_params';
+import { ALL_REQUIRED_TICKER_NAMES, GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH } from '../../common_params';
 import { IStocksReponseMarketItem, IStocksResponseMarketData } from '../../typings';
 
 const arrayToObject = (array) => {
@@ -50,7 +50,7 @@ export const getFilteredOnlyRequiredStocksData = async ({
 
   if (noFoundTickers.length) {
     await Promise.all([...noFoundTickers.map(noFoundTicker => {
-      return debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, `[save_share_prices] Nothing found for ticker '${noFoundTicker}'`);
+      return debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), `[save_share_prices] Nothing found for ticker '${noFoundTicker}'`);
     })])
   }
 

@@ -1,12 +1,12 @@
 import { debug_log } from '../../project_helpers/debug_log';
-import { SAVE_SHARE_PRICES_TODAY_LOG_PATH } from './common_params';
+import { GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH } from './common_params';
 import { getFilteredOnlyRequiredStocksData } from './helpers/get_filtered_only_required_stocks_data';
 import { getRequiredStocksDataWithColumnNames } from './helpers/get_required_stocks_data_with_column_names';
 import { getResponseDataFromAPI } from './helpers/get_response_data_from_API';
 import { mergeStocksDataIntoFile } from './helpers/merge_stocks_data_into_file';
 
 export default async () => {
-  await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] Start.', {
+  await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] Start.', {
     isFirstLogMessage: true
   });
 
@@ -26,6 +26,6 @@ export default async () => {
   const isSaved = await mergeStocksDataIntoFile(requiredStocksDataWithColumnNames);
 
   isSaved ?
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] End ok.') :
-    await debug_log(SAVE_SHARE_PRICES_TODAY_LOG_PATH, '[save_share_prices] End not ok.');
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] End ok.') :
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), '[save_share_prices] End not ok.');
 };

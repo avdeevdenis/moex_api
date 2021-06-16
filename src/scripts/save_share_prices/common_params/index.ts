@@ -18,27 +18,35 @@ export const SERVER_DIR = 'src/raw_data';
  */
 export const STOCK_PRICES_BY_DATE_DATA_DIR_NAME = SERVER_DIR + '/stocks_prices_by_date_data';
 
-const STOCK_PRICES_TODAY_FILENAME = getStockPricesTodayFileName();
-
 /**
- * Файл с данными про акции по конкретному дню (вида DD_MM_YYYY)
+ * Полный путь к файлу про акции по конкретному дню (вида DD_MM_YYYY)
  */
-export const STOCK_PRICES_TODAY_FILE_NAME = STOCK_PRICES_TODAY_FILENAME + '.json';
-
-/**
- * Полный путь к файлу про акции по конкретному дню
- */
-export const STOCK_PRICES_TODAY_PATH = STOCK_PRICES_BY_DATE_DATA_DIR_NAME + '/' + STOCK_PRICES_TODAY_FILE_NAME;
+export const GET_STOCK_PRICES_TODAY_PATH = () => {
+  return getStockPricesTodayFileName({
+    pathStart: STOCK_PRICES_BY_DATE_DATA_DIR_NAME,
+    extension: 'json',
+  });
+};
 
 /**
  * Путь по которому хранятся логи выполнения скрипта 'save_share_prices
  */
-export const SAVE_SHARE_PRICES_TODAY_LOG_PATH = 'src/logs/save_share_prices/' + STOCK_PRICES_TODAY_FILENAME + '.txt';
+export const GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH = () => {
+  return getStockPricesTodayFileName({
+    pathStart: 'src/logs/save_share_prices',
+    extension: 'txt',
+  });
+};
 
 /**
- * Путь по которому хранятся логи выполнения скрипта 'check_difference_in_share_prices
+ * Путь по которому хранятся логи выполнения скрипта 'check_difference_in_share_prices'
  */
-export const CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH = 'src/logs/check_difference_in_share_prices/' + STOCK_PRICES_TODAY_FILENAME + '.txt';
+export const GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH = () => {
+  return getStockPricesTodayFileName({
+    pathStart: 'src/logs/check_difference_in_share_prices',
+    extension: 'txt',
+  });
+};
 
 /**
  * Возвращает информацию о всех тикерах акций на Московской бирже
