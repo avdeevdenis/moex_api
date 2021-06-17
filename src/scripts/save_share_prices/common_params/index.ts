@@ -29,7 +29,7 @@ export const GET_STOCK_PRICES_TODAY_PATH = () => {
 };
 
 /**
- * Путь по которому хранятся логи выполнения скрипта 'save_share_prices
+ * Путь по которому хранятся логи выполнения скрипта 'save_share_prices'
  */
 export const GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH = () => {
   return getStockPricesTodayFileName({

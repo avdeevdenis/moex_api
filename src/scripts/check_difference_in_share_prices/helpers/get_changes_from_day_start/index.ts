@@ -26,6 +26,8 @@ const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInf
 
   const stockPercentageDiff = getPercentageDiff(firstDataValue, recentDataValue);
 
+  if (!firstData.LAST || !recentData.LAST) return;
+
   /**
    * Рост/падение котировки превышает целевое значение
    */

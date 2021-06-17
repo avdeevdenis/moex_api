@@ -42,16 +42,14 @@ export const getFilteredOnlyRequiredStocksData = async ({
       if (item) {
         result.push(item);
       } else {
-        noFoundTickers.push(item);
+        noFoundTickers.push(tickerName);
       }
 
       return result;
     }, [] as IStocksReponseMarketItem[]);
 
   if (noFoundTickers.length) {
-    await Promise.all([...noFoundTickers.map(noFoundTicker => {
-      return debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), `[save_share_prices] Nothing found for ticker '${noFoundTicker}'`);
-    })])
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), `[save_share_prices] Nothing found for ticker '${JSON.stringify(noFoundTickers)}'`);
   }
 
   return filteredTickersData;

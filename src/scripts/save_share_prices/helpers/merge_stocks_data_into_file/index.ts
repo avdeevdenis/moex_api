@@ -39,6 +39,16 @@ export const mergeStocksDataIntoFile = async (stocksData: IStocksMarketItemObjec
 };
 
 /**
+ * Отсекаем котировки акций, если это не сегодняшняя котировка, а вчерашняя, для этого проверяем что время обновления котировки < 12
+ */
+const isTodayTime = (time: string) => {
+  const hours = time.split(':')[0];
+  const hoursInt = parseInt(hours, 10);
+
+  return hoursInt < 12;
+};
+
+/**
  * Объединяем данные из файла с данными полученными
  */
 const combineStocksDataWithFileData = (stocksData: IStocksMarketItemObject[], fileDataJSON) => {
@@ -73,7 +83,10 @@ const combineStocksDataWithFileData = (stocksData: IStocksMarketItemObject[], fi
       if (tickerValuesArray.length >= 2) {
         tickerValuesArray[tickerValuesArray.length - 1] = restItemData;
       } else {
-        tickerValuesArray.push(restItemData);
+        // Если пушим первый элемент массива - информация в нем должна быть строго от сегодняшнего дня
+        if (isTodayTime(restItemData.TIME) && restItemData.LAST) {
+          tickerValuesArray.push(restItemData);
+        }
       }
     }
   });
