@@ -1,3 +1,4 @@
+import { StocksChangesItem } from '../..';
 import { debug_log } from '../../../../project_helpers/debug_log';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, GET_STOCK_PRICES_TODAY_PATH } from '../../../save_share_prices/common_params';
 import { IAvaliableTickerName, IStocksSavedToFileObjectItem } from '../../../save_share_prices/typings';
@@ -46,10 +47,12 @@ const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInf
     tickerName,
     isSignificantValue,
     stockPercentageDiff,
+    updateTimeFirst: firstData.UPDATED_TIME,
+    updateTimeRecent: recentData.UPDATED_TIME
   };
 };
 
-export const getChangesFromDayStart = async () => {
+export const getChangesFromDayStart: () => Promise<StocksChangesItem[]> = async () => {
   await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), `[check_difference_in_share_prices] getChangesFromDayStart start from file '${GET_STOCK_PRICES_TODAY_PATH()}'.`);
 
   let fileData;

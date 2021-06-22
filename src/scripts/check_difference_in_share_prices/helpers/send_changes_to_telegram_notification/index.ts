@@ -1,3 +1,4 @@
+import { StocksChangesItem } from '../..';
 import { debug_log } from '../../../../project_helpers/debug_log';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../../../save_share_prices/common_params';
 import { saveNotificationStateToStocksDataFile } from '../save_notification_state_to_stocks_data_file';
@@ -8,7 +9,7 @@ import { sendDayChangesNotification } from '../send_day_changes_notification';
  * отправляет оповещения в телеграме о росте котировок
  */
 // TODO ADD WEEKLY AND MONTHLY
-export const sendChangesToTelegramNotification = async ({ dayStartChanges }) => {
+export const sendChangesToTelegramNotification = async ({ dayStartChanges }: { dayStartChanges: StocksChangesItem[] }) => {
   await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] sendChangesToTelegramNotification start.');
 
   const hasDayStartChanges = dayStartChanges && dayStartChanges.length;

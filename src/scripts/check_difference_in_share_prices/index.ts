@@ -5,8 +5,17 @@ require('dotenv').config();
 
 import { debug_log } from '../../project_helpers/debug_log';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../save_share_prices/common_params';
+import { IAvaliableTickerName } from '../save_share_prices/typings';
 import { getChangesFromDayStart } from './helpers/get_changes_from_day_start';
 import { sendChangesToTelegramNotification } from './helpers/send_changes_to_telegram_notification';
+
+export type StocksChangesItem = {
+  tickerName: IAvaliableTickerName;
+  isSignificantValue: boolean;
+  stockPercentageDiff: number;
+  updateTimeFirst: string;
+  updateTimeRecent: string;
+}
 
 /**
  * Функциональность следующая - проверяем изменение цены каждой конкретно акции, и если
@@ -18,7 +27,9 @@ export default async () => {
   });
 
   // Смотрим изменение цен с начала дня
-  const dayStartChanges = await getChangesFromDayStart();
+  const dayStartChanges: StocksChangesItem[] = await getChangesFromDayStart();
+
+  if (!dayStartChanges) return;
 
   // Смотрим изменение цен с начала недели
   // TODO ADD
