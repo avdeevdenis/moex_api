@@ -17,7 +17,9 @@ export const saveNotificationStateToStocksDataFile = async (changesData) => {
   try {
     fileDataJSON = JSON.parse(fileData);
   } catch (error) {
-    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] saveNotificationStateToStocksDataFile fileDataJSON JSON.parse error.' + error.message);
+    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] saveNotificationStateToStocksDataFile fileDataJSON JSON.parse error.' + error.message, {
+      isError: true
+    });
   }
 
   if (!fileDataJSON) return;
@@ -38,7 +40,9 @@ export const saveNotificationStateToStocksDataFile = async (changesData) => {
 
   // Записываем в файл полученную информацию
   await saveDataToFile(JSON.stringify(fileDataJSON), GET_STOCK_PRICES_TODAY_PATH(), async (error: Error) => {
-    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] saveNotificationStateToStocksDataFile saveDataToFile error.' + error.message);
+    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] saveNotificationStateToStocksDataFile saveDataToFile error.' + error.message, {
+      isError: true
+    });
   });
 
   await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] saveNotificationStateToStocksDataFile save notification state to stocks data file end.');

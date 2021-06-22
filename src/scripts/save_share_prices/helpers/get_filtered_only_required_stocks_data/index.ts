@@ -49,7 +49,7 @@ export const getFilteredOnlyRequiredStocksData = async ({
     }, [] as IStocksReponseMarketItem[]);
 
   if (noFoundTickers.length) {
-    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), `[save_share_prices] Nothing found for ticker '${JSON.stringify(noFoundTickers)}'`);
+    await debug_log(GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH(), `[save_share_prices] Nothing found for tickers '${JSON.stringify(noFoundTickers)}'`);
   }
 
   return filteredTickersData;

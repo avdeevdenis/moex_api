@@ -1,6 +1,6 @@
 import { debug_log } from '../../../../project_helpers/debug_log';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, GET_STOCK_PRICES_TODAY_PATH } from '../../../save_share_prices/common_params';
-import { IAvaliableTickerName } from '../../../save_share_prices/typings';
+import { IAvaliableTickerName, IStocksSavedToFileObjectItem } from '../../../save_share_prices/typings';
 import { getPercentageDiff } from '../get_percentage_diff';
 
 const fs = require('fs');
@@ -10,7 +10,12 @@ const fs = require('fs');
  */
 export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY = 3.0;
 
-const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInfo) => {
+type TickerInfo = {
+  values: IStocksSavedToFileObjectItem[],
+  wasNotificationSended: boolean,
+};
+
+const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInfo: TickerInfo) => {
   const { values: tickerData, wasNotificationSended } = tickerInfo;
 
   // Отсекаем сразу тикеры, оповещения об изменении которых уже были отправлены ранее
@@ -21,12 +26,12 @@ const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInf
 
   if (!firstData || !recentData) return;
 
-  const firstDataValue = firstData.LAST;
-  const recentDataValue = recentData.LAST;
+  const firstDataValue = firstData.PRICE;
+  const recentDataValue = recentData.PRICE;
 
   const stockPercentageDiff = getPercentageDiff(firstDataValue, recentDataValue);
 
-  if (!firstData.LAST || !recentData.LAST) return;
+  if (!firstData.PRICE || !recentData.PRICE) return;
 
   /**
    * Рост/падение котировки превышает целевое значение
@@ -52,7 +57,9 @@ export const getChangesFromDayStart = async () => {
   try {
     fileData = await fs.readFileSync(GET_STOCK_PRICES_TODAY_PATH(), { encoding: 'utf8' });
   } catch (error) {
-    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart readFileSync error.' + error.message);
+    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart readFileSync error.' + error.message, {
+      isError: true
+    });
   }
 
   let fileDataJSON;
@@ -60,7 +67,9 @@ export const getChangesFromDayStart = async () => {
   try {
     fileDataJSON = JSON.parse(fileData);
   } catch (error) {
-    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart JSON.parse error.' + error.message);
+    await debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), '[check_difference_in_share_prices] getChangesFromDayStart JSON.parse error.' + error.message, {
+      isError: true
+    });
   }
 
   if (!fileDataJSON) return;

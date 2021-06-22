@@ -5,7 +5,6 @@ import {
   IAvaliableTickerNameForForeignMarket,
   IAvaliableTickerNameForFundMarket,
   IAvaliableTickerNameForRussianMarket,
-  IRecievedFieldsFromApiSequrence,
 } from '../typings';
 
 /**
@@ -63,24 +62,37 @@ export const MOEX_API_FUND_STOCKS_SECURITIES_HOST = 'https://iss.moex.com/iss/en
  */
 export const MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST = 'https://iss.moex.com/iss/engines/stock/markets/foreignshares/boards/FQBR/securities.json' as const;
 
+type IRevieverFieldFromApi = 'SECID' | 'UPDATETIME' | 'LCURRENTPRICE' | 'ETFSETTLEPRICE';
+
 /**
- * Поля, необходимые получить по каждому тикеру
+ * Поля, необходимые получить по каждому тикеру по акциям
  */
-export const REQUIRED_FILEDS_RECIEVED_FROM_API: IRecievedFieldsFromApiSequrence = [
+export const REQUIRED_FILEDS_RECIEVED_FROM_API: IRevieverFieldFromApi[] = [
   'SECID',
-  'TIME',
-  'LAST',
+  'UPDATETIME',
+  'LCURRENTPRICE',
 ];
 
 /**
  * Возвращает полный URL для запроса в MOEX API за информацией по тикерам
  */
-export const GET_MOEX_API_URL_WITH_PARAMS = (host: typeof MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST | typeof MOEX_API_STOCKS_SECURITIES_HOST | typeof MOEX_API_FUND_STOCKS_SECURITIES_HOST) => {
+export const GET_MOEX_API_URL_WITH_PARAMS = (
+  host: typeof MOEX_API_FOREIGN_STOCKS_SECURITIES_HOST | typeof MOEX_API_STOCKS_SECURITIES_HOST | typeof MOEX_API_FUND_STOCKS_SECURITIES_HOST
+) => {
   return host +
     '?iss.meta=off' +
     '&iss.only=marketdata' +
     '&marketdata.columns=' + encodeURIComponent(REQUIRED_FILEDS_RECIEVED_FROM_API.join(','));
 };
+
+/**
+ * Информация о каждом тикере по порядку
+ */
+export const STOCKS_COLUMNS_ORDER = [
+  'TICKER',
+  'UPDATED_TIME',
+  'PRICE'
+] as const;
 
 /**
  * Тикеры зарубежных компаний, информацию по которым хотим получить

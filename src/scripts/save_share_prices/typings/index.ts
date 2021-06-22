@@ -35,32 +35,41 @@ export type IAvaliableTickerNameForFundMarket =
 
 export type IAvaliableTickerName = IAvaliableTickerNameForRussianMarket | IAvaliableTickerNameForForeignMarket | IAvaliableTickerNameForFundMarket;
 
-export type IRecievedFieldsFromApi =
-  'SECID' |
-  'TIME' |
-  'LAST';
-
-export type IRecievedFieldsFromApiSequrence = ['SECID', 'TIME', 'LAST'];
-export type IRecievedFieldsFromApiSequrenceWithCustomFields = ['SECID', 'TIME', 'LAST', 'UNIX_TIME'];
-
-export type IAvaliableTickerTime = string;
+export type IAvaliableTickerUpdatedTime = string;
 export type IAvaliableTickerValue = number;
-export type IAvaliableTickerUnixTime = number;
 
 export type IStocksReponseMarketItem = [
   IAvaliableTickerName,
-  IAvaliableTickerTime,
+  IAvaliableTickerUpdatedTime,
   IAvaliableTickerValue,
 ];
 
 export type IStocksMarketItemObject = {
   SECID: IAvaliableTickerName,
-  TIME: IAvaliableTickerTime,
+  TIME: IAvaliableTickerUpdatedTime,
   LAST: IAvaliableTickerValue,
-  UNIX_TIME: IAvaliableTickerUnixTime,
 }
 
+/**
+ * Секция 'marketdata' ответа от API MOEX
+ */
 export type IStocksResponseMarketData = {
-  columns: IRecievedFieldsFromApiSequrence | IRecievedFieldsFromApiSequrenceWithCustomFields,
   data: IStocksReponseMarketItem,
+};
+
+/**
+ * Тип для преобразованных данных по тикерам
+ */
+export type IStocksPreparedMarketDataObject = {
+  TICKER: IAvaliableTickerName,
+  UPDATED_TIME: IAvaliableTickerUpdatedTime,
+  PRICE: number,
+};
+
+/**
+ * Тип для преобразованных данных по тикерам, который записывается в файл
+ */
+ export type IStocksSavedToFileObjectItem = {
+  UPDATED_TIME: IAvaliableTickerUpdatedTime,
+  PRICE: number,
 };

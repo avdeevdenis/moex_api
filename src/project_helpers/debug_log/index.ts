@@ -12,7 +12,12 @@ type DebugLogOptions = {
   /**
    * Если первое сообщение в логах - выставляем delimiter
    */
-  isFirstLogMessage: boolean;
+  isFirstLogMessage?: boolean;
+
+  /**
+   * Если присутствует явная ошибка в сообщении лога - маркируем (чтобы было заметнее)
+   */
+  isError?: boolean;
 };
 
 export const debug_log = async (logFilePath: string, logData: string, options?: DebugLogOptions) => {
@@ -60,7 +65,8 @@ export const debug_log = async (logFilePath: string, logData: string, options?: 
  * - UNIX_TIMESTAMP
  */
 export const prepareLogData = (logData: string, options?: DebugLogOptions) => {
-  const isFirstLogMessage = options && options.isFirstLogMessage;
+  const isFirstLogMessage = options?.isFirstLogMessage;
+  const isError = options?.isError;
 
   /**
    * Если первое сообщение в логах - выставляем delimiter
@@ -69,5 +75,13 @@ export const prepareLogData = (logData: string, options?: DebugLogOptions) => {
 
   const now = DateTime.now().setZone('Europe/Moscow').toISOTime();
 
-  return newLine + `[${now}] ` + logData;
+  let preparedLogData = '';
+
+  if (isError) {
+    preparedLogData = '❌❌❌ ' + logData;
+  } else {
+    preparedLogData = logData;
+  }
+
+  return newLine + `[${now}] ` + preparedLogData;
 };
