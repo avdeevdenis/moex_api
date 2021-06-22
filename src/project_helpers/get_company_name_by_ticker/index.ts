@@ -56,6 +56,42 @@ export const getCompanyNameByTicker = (tickerName: IAvaliableTickerName) => {
     case 'VZ-RM':
       return 'Verizon Communications Inc';
 
+    case 'TBIO':
+      return 'Тинькофф NASDAQ Biotech';
+
+    case 'TSPX':
+      return 'Тинькофф S&P 500';
+
+    case 'TGLD':
+      return 'Тинькофф Золото';
+
+    case 'TECH':
+      return 'Тинькофф NASDAQ';
+
+    case 'TIPO':
+      return 'Тинькофф Индекс IPO';
+
+    case 'TMOS':
+      return 'Тинькофф iMOEX';
+
+    case 'TBIO':
+      return 'Тинькофф NASDAQ Biotech';
+
+    case 'FXDM':
+      return 'FinEx Акций компаний развитых стран без США';
+
+    case 'FXGD':
+      return 'FinEx Золото';
+
+    case 'FXTP':
+      return 'FinEx Облигации TIPS';
+
+    case 'FXIM':
+      return 'FinEx Акции компаний IT-сектора США';
+
+    case 'FXWO':
+      return 'FinEx Акции глобального рынка';
+
     default: return '';
   }
 };
