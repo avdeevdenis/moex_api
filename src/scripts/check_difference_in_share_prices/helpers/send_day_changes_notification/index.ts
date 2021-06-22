@@ -3,7 +3,7 @@ import { debug_log } from '../../../../project_helpers/debug_log';
 import { getCompanyNameByTicker } from '../../../../project_helpers/get_company_name_by_ticker';
 import { sendTelegramMessage } from '../../../../project_helpers/send_telegram_message';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../../../save_share_prices/common_params';
-import { SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY } from '../get_changes_from_day_start';
+import { getSignificantPercentageDifferencePerDay } from '../get_changes_from_day_start';
 
 /**
  * Приходит время в формате 12:30:25
@@ -47,7 +47,8 @@ export const sendDayChangesNotification = async (changesData: StocksChangesItem[
     const isPositiveDiff = stockPercentageDiff > 0;
 
     const changeAction = isPositiveDiff ? '↑' : '↓';
-    const changeValue = ` > ${SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY}% (${stockPercentageDiff}%)`;
+    const significantPercentageDifferencePerDay = getSignificantPercentageDifferencePerDay(tickerName);
+    const changeValue = ` > ${significantPercentageDifferencePerDay}% (${stockPercentageDiff}%)`;
     const sticker = isPositiveDiff ? '🍏' : '🍎';
 
     return messageTemplate(tickerName, changeAction, changeValue, sticker, updateTimeFirst, updateTimeRecent);

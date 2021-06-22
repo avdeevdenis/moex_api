@@ -1,19 +1,48 @@
 import { StocksChangesItem } from '../..';
 import { debug_log } from '../../../../project_helpers/debug_log';
-import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, GET_STOCK_PRICES_TODAY_PATH } from '../../../save_share_prices/common_params';
-import { IAvaliableTickerName, IStocksSavedToFileObjectItem } from '../../../save_share_prices/typings';
+import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, GET_STOCK_PRICES_TODAY_PATH, REQUIRED_TICKERS_FOR_FOREIGN_COMPANIES, REQUIRED_TICKERS_FOR_FUNDS, REQUIRED_TICKERS_FOR_RUSSIAN_COMPANIES } from '../../../save_share_prices/common_params';
+import { IAvaliableTickerName, IAvaliableTickerNameForForeignMarket, IAvaliableTickerNameForFundMarket, IAvaliableTickerNameForRussianMarket, IStocksSavedToFileObjectItem } from '../../../save_share_prices/typings';
 import { getPercentageDiff } from '../get_percentage_diff';
 
 const fs = require('fs');
 
 /**
  * Значение в процентах (от 1 до 99), при превышении которого (в обе стороны) считаем что котировки ценной бумаги выросли/упали
+ * ⚠️ Для акций
  */
-export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY = 3.0;
+export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_STOCKS = 5.0;
+
+/**
+ * Значение в процентах (от 1 до 99), при превышении которого (в обе стороны) считаем что котировки ценной бумаги выросли/упали
+ * ⚠️ Для фондов
+ */
+export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_FUNDS = 3.0;
 
 type TickerInfo = {
   values: IStocksSavedToFileObjectItem[],
   wasNotificationSended: boolean,
+};
+
+const isFund = (tickerName: IAvaliableTickerNameForFundMarket) => {
+  return REQUIRED_TICKERS_FOR_FUNDS.includes(tickerName);
+};
+
+const isStock = (tickerName: IAvaliableTickerNameForRussianMarket | IAvaliableTickerNameForForeignMarket) => {
+  const allStockTikers = [...REQUIRED_TICKERS_FOR_RUSSIAN_COMPANIES, ...REQUIRED_TICKERS_FOR_FOREIGN_COMPANIES];
+
+  return allStockTikers.includes(tickerName);
+};
+
+export const getSignificantPercentageDifferencePerDay = (tickerName: IAvaliableTickerName) => {
+  if (isFund(tickerName as IAvaliableTickerNameForFundMarket)) {
+    return SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_FUNDS;
+  }
+
+  if (isStock(tickerName as IAvaliableTickerNameForRussianMarket | IAvaliableTickerNameForForeignMarket)) {
+    return SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_STOCKS;
+  }
+
+  debug_log(GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH(), `[check_difference_in_share_prices] getSignificantPercentageDifferencePerDay no correct significant percentage difference for '${tickerName}'`);
 };
 
 const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInfo: TickerInfo) => {
@@ -33,6 +62,11 @@ const checkDayChangesForOneTicker = (tickerName: IAvaliableTickerName, tickerInf
   const stockPercentageDiff = getPercentageDiff(firstDataValue, recentDataValue);
 
   if (!firstData.PRICE || !recentData.PRICE) return;
+
+  /**
+   * Выбираем в качестве целевого разные значения, т.к. акции более волатильны, чем фонды
+   */
+  const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY = getSignificantPercentageDifferencePerDay(tickerName);
 
   /**
    * Рост/падение котировки превышает целевое значение
