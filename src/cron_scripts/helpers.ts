@@ -6,9 +6,9 @@ const { DateTime } = require('luxon');
 /**
  * Просто записываем в файл сам факт запуска крона
  */
-export const saveCronLaunch = () => {
+export const saveCronLaunch = (message: string) => {
   const now = DateTime.now().setZone('Europe/Moscow').toString();
-  const appendData = `\n[${now}] [cron_script] launch.`;
+  const appendData = `\n[${now}] [cron_script] launch ${message}.`;
 
   fs.appendFile('src/logs/cron_launches/launches.txt', appendData, (err: Error) => {
     if (err) {
