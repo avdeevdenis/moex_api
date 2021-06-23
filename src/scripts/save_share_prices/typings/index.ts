@@ -1,3 +1,5 @@
+import { TickerInfo } from "../../check_difference_in_share_prices/helpers/get_changes_from_day_start";
+
 export type IAvaliableTickerNameForRussianMarket =
   'YNDX' |
   'VTBR' |
@@ -69,7 +71,14 @@ export type IStocksPreparedMarketDataObject = {
 /**
  * Тип для преобразованных данных по тикерам, который записывается в файл
  */
- export type IStocksSavedToFileObjectItem = {
+export type IStocksSavedToFileObjectItem = {
   UPDATED_TIME: IAvaliableTickerUpdatedTime,
   PRICE: number,
+};
+
+/**
+ * Тайпинг содержимого JSON-файла с котировками
+ */
+export type StocksFileDataJSON = {
+  [key in IAvaliableTickerName]: TickerInfo;
 };

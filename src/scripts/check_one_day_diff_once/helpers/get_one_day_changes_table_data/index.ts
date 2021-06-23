@@ -1,5 +1,5 @@
 import { getPercentageDiff } from '../../../check_difference_in_share_prices/helpers/get_percentage_diff';
-import { IAvaliableTickerName, IStocksSavedToFileObjectItem } from '../../../save_share_prices/typings';
+import { IAvaliableTickerName, IStocksSavedToFileObjectItem, StocksFileDataJSON } from '../../../save_share_prices/typings';
 
 /**
  * Ограничиваем количество выводимых в результате элементов (с прибылью и с убытком отдельно)
@@ -9,16 +9,25 @@ const RESPONSE_ITEMS_LIMIT = 5;
 /**
  * Формирует итоговые данные, по которым будет отрисована таблица с топ-изменений за день
  */
-export const getOneDayChangesTableData = (fileDataJson) => {
+export const getOneDayChangesTableData = (fileDataJson: StocksFileDataJSON) => {
+  /**
+   * Оставляем только те данные, где есть два временных промежутка
+   */
+  const noEmptyFileDataKeys = Object.keys(fileDataJson).filter(tickerName => {
+    return fileDataJson[tickerName].values.length == 2;
+  });
+
   /**
    * Сортируем названия тикеров в таком порядке - сначала с наибольшей разницей в стоимости в плюс,
    * в конце - с наибольшей разницей в минус
    */
-  const sortedTickerNames = Object.keys(fileDataJson).sort((firstTickerName, secondTickerName) => {
-    const [{ PRICE: firstTikerStartPrice }, { PRICE: firstTikerLastPrice }] = fileDataJson[firstTickerName].values as IStocksSavedToFileObjectItem[];
+  const sortedTickerNames = noEmptyFileDataKeys.sort((firstTickerName: IAvaliableTickerName, secondTickerName: IAvaliableTickerName) => {
+    const firstTikerValues = fileDataJson[firstTickerName].values;
+    
+    const [{ PRICE: firstTikerStartPrice }, { PRICE: firstTikerLastPrice }] = firstTikerValues;
     const firstTickerPriceDiff = getPercentageDiff(firstTikerStartPrice, firstTikerLastPrice);
 
-    const [{ PRICE: secondTickerStartPrice }, { PRICE: secondTickerLastPrice }] = fileDataJson[secondTickerName].values as IStocksSavedToFileObjectItem[];
+    const [{ PRICE: secondTickerStartPrice }, { PRICE: secondTickerLastPrice }] = fileDataJson[secondTickerName].values;
     const secondTickerPriceDiff = getPercentageDiff(secondTickerStartPrice, secondTickerLastPrice);
 
     return secondTickerPriceDiff - firstTickerPriceDiff;

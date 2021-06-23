@@ -1,5 +1,7 @@
 import { GET_IMAGE_TABLE_FILEPATH, IMAGE_TABLE_DIR } from "../..";
 import { createDirIfNotExits } from "../../../../project_helpers/create_dir_if_not_exists";
+import { debug_log } from "../../../../project_helpers/debug_log";
+import { GET_CHECK_ONE_DAY_DIFF_LOG_PATH } from "../../../save_share_prices/common_params";
 import { getToday } from "../../../save_share_prices/helpers/get_stock_prices_today_filename";
 import { getHTMLTableRows, getHTMLTemplate } from "../get_html_template";
 import { OneDayChangesData } from "../get_one_day_changes_table_data";
@@ -36,9 +38,18 @@ export const createImageTableWithDayChangesData = async (dayChangesData: OneDayC
 
   await createDirIfNotExits(IMAGE_TABLE_DIR);
 
+  await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer start.');
+
   try {
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer launch (1).');
+
     const browser = await puppeteer.launch();
+
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer new page (2).');
+
     const page = await browser.newPage();
+
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer setViewport (3).');
 
     await page.setViewport({
       width: PAGE_WIDTH,
@@ -46,12 +57,22 @@ export const createImageTableWithDayChangesData = async (dayChangesData: OneDayC
       deviceScaleFactor: 1.5,
     });
 
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer setContent html (4).');
+
     await page.setContent(htmlTemplate);
+
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer screenshot (5).');
 
     await page.screenshot({ path: GET_IMAGE_TABLE_FILEPATH() });
 
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer browser close (6).');
+
     await browser.close();
-  } catch (e) {
-    // TODO
+
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer end.');
+  } catch (error) {
+    await debug_log(GET_CHECK_ONE_DAY_DIFF_LOG_PATH(), '[check_one_day_diff] createImageTableWithDayChangesData puppeteer error.' + error.message, {
+      isError: true,
+    });
   }
 };
