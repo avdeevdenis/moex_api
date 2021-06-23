@@ -26,10 +26,7 @@ export const sendDayChangesNotification = async (changesData: StocksChangesItem[
 
     const updateTimeDiff = `\nFrom *${getTimeWithoutSeconds(updateTimeFirst)}* to *${getTimeWithoutSeconds(updateTimeRecent)}*.`;
 
-    /**
-     * Если название компании SPCE-RM - тогда оставляем только SPCE
-     */
-    const hashtag = tickerName.includes('-') ? `\n#${tickerName.split('-')[0]}` : `\n#${tickerName}`;
+    const hashtag = '#' + tickerName;
 
     /**
      * For example:

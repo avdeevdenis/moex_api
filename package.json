@@ -6,7 +6,7 @@
     "dev": "tsc --watch",
     "stocks:save_share_prices": "NODE_ENV=dev node src/scripts_runner/save_share_prices",
     "stocks:check_difference_in_share_prices": "NODE_ENV=dev node src/scripts_runner/check_difference_in_share_prices",
-    "stocks:save_share_prices_and_check_difference_in_share_prices": "NODE_ENV=dev node src/scripts_runner/save_share_prices_and_check_difference_in_share_prices"
+    "stocks:check_one_day_diff_once": "NODE_ENV=dev node src/scripts_runner/check_one_day_diff_once"
   },
   "author": "Avdeev Denis",
   "license": "ISC",
@@ -16,7 +16,8 @@
     "forever": "^4.0.0",
     "fs": "0.0.1-security",
     "node-cron": "^3.0.0",
-    "node-telegram-bot-api": "^0.53.0"
+    "node-telegram-bot-api": "^0.53.0",
+    "puppeteer": "^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^15.12.2",

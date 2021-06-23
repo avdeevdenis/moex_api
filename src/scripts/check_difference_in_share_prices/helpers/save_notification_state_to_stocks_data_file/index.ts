@@ -1,8 +1,7 @@
+import * as fs from 'fs';
 import { debug_log } from '../../../../project_helpers/debug_log';
 import { saveDataToFile } from '../../../../project_helpers/save_data_to_file';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, GET_STOCK_PRICES_TODAY_PATH } from '../../../save_share_prices/common_params';
-
-const fs = require('fs');
 
 /**
  * Записываем флаг 'wasNotificationSended' ценнным бумагам, оповещения по которым были отправлены шагом ранее

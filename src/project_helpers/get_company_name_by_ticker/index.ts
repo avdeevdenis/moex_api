@@ -35,25 +35,25 @@ export const getCompanyNameByTicker = (tickerName: IAvaliableTickerName) => {
     case 'PHOR':
       return 'PhosAgro ao';
 
-    case 'SPCE-RM':
+    case 'SPCE':
       return 'Virgin Galactic Holdings Inc';
 
-    case 'AAPL-RM':
+    case 'AAPL':
       return 'Apple Inc';
 
-    case 'CSCO-RM':
+    case 'CSCO':
       return 'Cisco Systems Inc';
 
-    case 'T-RM':
+    case 'T':
       return 'AT&T Inc';
 
-    case 'KO-RM':
+    case 'KO':
       return 'Coca-Cola Co';
 
-    case 'XOM-RM':
+    case 'XOM':
       return 'Exxon Mobil Corp';
 
-    case 'VZ-RM':
+    case 'VZ':
       return 'Verizon Communications Inc';
 
     case 'TBIO':

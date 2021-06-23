@@ -14,18 +14,24 @@ type StockPricesTodayOptions = {
   extension: 'json' | 'txt';
 };
 
-export const getStockPricesTodayFileName = ({ pathStart, extension }: StockPricesTodayOptions) => {
+export const getToday = () => {
   const now = DateTime.now().setZone('Europe/Moscow');
 
   const value = (number) => {
     return number < 10 ? '0' + number : number;
   }
 
-  const filename = [
+  const today = [
     value(now.c.day),
     value(now.c.month),
     value(now.c.year),
   ].join('_');
+
+  return today;
+};
+
+export const getStockPricesTodayFileName = ({ pathStart, extension }: StockPricesTodayOptions) => {
+  const filename = getToday();
 
   const pathName = pathStart ? pathStart + '/' : '';
 

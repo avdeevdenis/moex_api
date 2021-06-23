@@ -1,4 +1,5 @@
 import AvdeevStocksBot from '../get_telegram_bot';
+import { TelegramSendOptions } from '../send_telegram_photo';
 import { AVDEEV_DENIS_ID } from '../telegram_configs';
 
 /**
@@ -9,7 +10,7 @@ export const sendTelegramMessage = async (messageText: string, callback?: (messa
     AVDEEV_DENIS_ID,
     messageText, {
       parse_mode: 'Markdown'
-    }
+    } as TelegramSendOptions
   ];
 
   return new Promise(resolve => {

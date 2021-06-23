@@ -48,6 +48,16 @@ export const GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH = () => {
 };
 
 /**
+ * Путь по которому хранятся логи выполнения скрипта 'check_one_day_diff'
+ */
+export const GET_CHECK_ONE_DAY_DIFF_LOG_PATH = () => {
+  return getStockPricesTodayFileName({
+    pathStart: 'src/logs/check_one_day_diff',
+    extension: 'txt',
+  });
+};
+
+/**
  * Возвращает информацию о всех тикерах акций на Московской бирже
  */
 export const MOEX_API_STOCKS_SECURITIES_HOST = 'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json';
@@ -98,13 +108,13 @@ export const STOCKS_COLUMNS_ORDER = [
  * Тикеры зарубежных компаний, информацию по которым хотим получить
  */
 export const REQUIRED_TICKERS_FOR_FOREIGN_COMPANIES: IAvaliableTickerNameForForeignMarket[] = [
-  'SPCE-RM',
-  'AAPL-RM',
-  'T-RM',
-  'CSCO-RM',
-  'KO-RM',
-  'XOM-RM',
-  'VZ-RM'
+  'SPCE',
+  'AAPL',
+  'T',
+  'CSCO',
+  'KO',
+  'XOM',
+  'VZ'
 ];
 
 /**

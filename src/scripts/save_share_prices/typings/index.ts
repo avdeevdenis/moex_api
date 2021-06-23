@@ -12,13 +12,13 @@ export type IAvaliableTickerNameForRussianMarket =
   'OZON';
 
 export type IAvaliableTickerNameForForeignMarket =
-  'SPCE-RM' |
-  'AAPL-RM' |
-  'T-RM' |
-  'CSCO-RM' |
-  'KO-RM' |
-  'XOM-RM' |
-  'VZ-RM';
+  'SPCE' |
+  'AAPL' |
+  'T' |
+  'CSCO' |
+  'KO' |
+  'XOM' |
+  'VZ';
 
 export type IAvaliableTickerNameForFundMarket =
   'TSPX' |
@@ -54,7 +54,7 @@ export type IStocksMarketItemObject = {
  * Секция 'marketdata' ответа от API MOEX
  */
 export type IStocksResponseMarketData = {
-  data: IStocksReponseMarketItem,
+  data: IStocksReponseMarketItem[],
 };
 
 /**

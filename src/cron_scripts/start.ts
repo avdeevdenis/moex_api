@@ -1,17 +1,18 @@
-import { debug_console } from '../project_helpers/debug_console';
 import check_difference_in_share_prices from '../scripts/check_difference_in_share_prices';
 import save_share_prices from '../scripts/save_share_prices';
+import { saveCronLaunch } from './helpers';
 
 const cron = require('node-cron');
-const fs = require('fs');
-const { DateTime } = require('luxon');
+
+// Оставляем для тестирования
+const REPEAT_INTERVALS = '*/5 * * * * *';
+// const REPEAT_INTERVALS = '*/5 4-20 * * 1-5';
 
 /**
  * Время работы cron-скрипта  - каждые 5 минут с 7:00 до 23:00 пт-пт включительно
  * (важно не забыть UTC+3)
  */
-// cron.schedule('*/5 * * * * *', async () => {
-cron.schedule('*/5 4-20 * * 1-5', async () => {
+cron.schedule(REPEAT_INTERVALS, async () => {
   /**
    * 1. Последовательность важна! Сначала запускам скрипт сохранения
    */
@@ -27,15 +28,3 @@ cron.schedule('*/5 4-20 * * 1-5', async () => {
    */
   await saveCronLaunch();
 });
-
-export const saveCronLaunch = () => {
-  const now = DateTime.now().setZone('Europe/Moscow').toString();
-  const appendData = `\n[${now}] [save_share_prices_and_check_difference_in_share_prices] launch.`;
-
-  fs.appendFile('src/logs/cron_launches/save_share_prices_and_check_difference_in_share_prices.txt', appendData, (err: Error) => {
-    if (err) {
-      debug_console('saveCronLaunch error.' + err.message);
-      return;
-    }
-  });
-};

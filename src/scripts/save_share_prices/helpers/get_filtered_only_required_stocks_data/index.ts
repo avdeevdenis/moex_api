@@ -23,12 +23,28 @@ export const getFilteredOnlyRequiredStocksData = async ({
   stocksFundsResponseData: IStocksResponseMarketData,
 }) => {
   /**
+   * Хотим использовать понятные названия, поэтому AAPL-RM преобразуем в AAPL
+   */
+  const stocksForeignResponseDataPrepared = stocksForeignResponseData.data.map(([tickerName, ...restProps]) => {
+    let tickerNamePrepared = '';
+
+    if (tickerName.endsWith('-RM')) {
+      tickerNamePrepared = tickerName.split('-RM')[0];
+    }
+
+    return [
+      tickerNamePrepared,
+      ...restProps,
+    ];
+  });
+
+  /**
    * Создаем объекты с ключами в виде тикеров для облегчения дальнейшей обработки
    */
   const responseDataObject = Object.assign(
     {},
     arrayToObject(stocksResponseData.data),
-    arrayToObject(stocksForeignResponseData.data),
+    arrayToObject(stocksForeignResponseDataPrepared),
     arrayToObject(stocksFundsResponseData.data),
   );
 

@@ -1,11 +1,10 @@
+import * as fs from 'fs';
 import { saveDataToFile } from '../../../../project_helpers/save_data_to_file';
 import { GET_SAVE_SHARE_PRICES_TODAY_LOG_PATH, SERVER_DIR, STOCK_PRICES_BY_DATE_DATA_DIR_NAME, GET_STOCK_PRICES_TODAY_PATH } from '../../common_params';
 import { IStocksPreparedMarketDataObject, IStocksSavedToFileObjectItem } from '../../typings';
 import { createDirIfNotExits } from '../../../../project_helpers/create_dir_if_not_exists';
 import { createFileIfNotExists } from '../../../../project_helpers/create_file_if_not_exists';
 import { debug_log } from '../../../../project_helpers/debug_log';
-
-const fs = require('fs');
 
 /**
  * Здесь записываем полученную информацию о тикерах в файл, при этом

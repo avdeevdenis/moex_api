@@ -8,6 +8,8 @@
 
 2. Команда `stocks:check_difference_in_share_prices` считывает содержимое файла, записанного на предыдущем этапе, и сравнивает изменение цен по некоторому алгоритму и в случае значимого изменения отправляет сообщение в телеграме с изменениями.
 
+3. Команда `stocks:check_one_day_diff_once` TODO.
+
 ## Launch CRON
 Запуск крона происходит командой
-`forever start src/cron_scripts/save_share_prices_and_check_difference_in_share_prices.js`
+`forever start src/cron_scripts/start.js`

@@ -1,22 +1,21 @@
+import * as fs from 'fs';
 import { StocksChangesItem } from '../..';
 import { debug_log } from '../../../../project_helpers/debug_log';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH, GET_STOCK_PRICES_TODAY_PATH, REQUIRED_TICKERS_FOR_FOREIGN_COMPANIES, REQUIRED_TICKERS_FOR_FUNDS, REQUIRED_TICKERS_FOR_RUSSIAN_COMPANIES } from '../../../save_share_prices/common_params';
 import { IAvaliableTickerName, IAvaliableTickerNameForForeignMarket, IAvaliableTickerNameForFundMarket, IAvaliableTickerNameForRussianMarket, IStocksSavedToFileObjectItem } from '../../../save_share_prices/typings';
 import { getPercentageDiff } from '../get_percentage_diff';
 
-const fs = require('fs');
-
 /**
- * Значение в процентах (от 1 до 99), при превышении которого (в обе стороны) считаем что котировки ценной бумаги выросли/упали
+ * Значение в процентах (от 1 до 99), при превышении которого (в обе стороны) в течение дня считаем что котировки ценной бумаги выросли/упали
  * ⚠️ Для акций
  */
-export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_STOCKS = 5.0;
+export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_STOCKS = 4.0;
 
 /**
- * Значение в процентах (от 1 до 99), при превышении которого (в обе стороны) считаем что котировки ценной бумаги выросли/упали
+ * Значение в процентах (от 1 до 99), при превышении которого (в обе стороны) в течение дня считаем что котировки ценной бумаги выросли/упали
  * ⚠️ Для фондов
  */
-export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_FUNDS = 3.0;
+export const SIGNIFICANT_PERCENTAGE_DIFFERENCE_PER_DAY_FOR_FUNDS = 2.5;
 
 type TickerInfo = {
   values: IStocksSavedToFileObjectItem[],

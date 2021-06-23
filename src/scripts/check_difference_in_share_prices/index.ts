@@ -1,7 +1,5 @@
-// https://stackoverflow.com/questions/65289566/node-telegram-bot-api-deprecated-automatic-enabling-of-cancellation-of-promises
-process.env.NTBA_FIX_319 = '1';
-
-require('dotenv').config();
+require('../../project_helpers/telegram_bot_deps');
+require('../../project_helpers/dotenv');
 
 import { debug_log } from '../../project_helpers/debug_log';
 import { GET_CHECK_DIFFERENCE_IN_SHARE_PRICES_LOG_PATH } from '../save_share_prices/common_params';
