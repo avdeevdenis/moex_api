@@ -35,7 +35,7 @@ export const sendDayChangesNotification = async (changesData: StocksChangesItem[
      * From 12:20 to 12:40
      * #YNDX
      */
-    return `${sticker} *${companyName} ${ticker} ${changeValue} ${changeAction}* ${updateTimeDiff}${hashtag}`;
+    return `${sticker} *${companyName} ${ticker} ${changeValue} ${changeAction}* ${updateTimeDiff}\n${hashtag}`;
   }
 
   const changeMessagesForTelegram = changesData.map(changeData => {
