@@ -19,22 +19,37 @@ const STATIC_TABLE_ROW_HEIGHT = 43;
 /**
  * Генерирует PNG-изображение, на котором изображены ТОП ценных бумаг, котировки которых отклонились (в обе стороны) максимально
  */
-export const createImageTableWithDayChangesData = async (dayChangesData: OneDayChangesData[]) => {
-  const htmlTableRows = getHTMLTableRows(dayChangesData);
-  const today = getToday().replace(/_/g, '.');
-  const htmlTemplate = getHTMLTemplate(htmlTableRows, STATIC_TABLE_ROW_HEIGHT, today);
+export const createImageTableWithDayChangesData = async ({
+  tickersDataWithHighestGrowthRate,
+  tickersDataWithHighestNegativeGrowthRate,
+}: {
+  tickersDataWithHighestGrowthRate: OneDayChangesData[],
+  tickersDataWithHighestNegativeGrowthRate: OneDayChangesData[],
+}) => {
+  const htmlPositiveTableRows = getHTMLTableRows(tickersDataWithHighestGrowthRate);
+  const htmlNegativeTableRows = getHTMLTableRows(tickersDataWithHighestNegativeGrowthRate);
+
+  const todayDate = getToday().replace(/_/g, '.');
+  const htmlTemplate = getHTMLTemplate({
+    positiveTableRows: htmlPositiveTableRows,
+    negativeTableRows: htmlNegativeTableRows,
+    todayDate,
+    tableRowHeight: STATIC_TABLE_ROW_HEIGHT
+  });
 
   const MARGIN = 10;
 
   /**
-   * Первая колонка (тикер) + вторая колонка (значение в процентах) + 10px * 2 - отступы
+   * (Первая колонка (тикер) + вторая колонка (значение в процентах)) * 2 + 10px * 2 - отступы
    */
-  const PAGE_WIDTH = 100 + 75 + MARGIN * 2; // first col (name) + 2 col + margin x2
+  const PAGE_WIDTH = (100 + 75) * 2 + MARGIN * 2; // first col (name) + 2 col + margin x2
+
+  const maxTableLength = Math.max(tickersDataWithHighestGrowthRate.length, tickersDataWithHighestNegativeGrowthRate.length);
 
   /**
    * 2 строки - шапка таблицы (день + названия столбцов) + количество колонок * высоту одной колонки + 10px * 2 - отступы
    */
-  const PAGE_HEIGHT = (dayChangesData.length + 2) * STATIC_TABLE_ROW_HEIGHT + MARGIN * 2;
+  const PAGE_HEIGHT = (maxTableLength + 2) * STATIC_TABLE_ROW_HEIGHT + MARGIN * 2;
 
   await createDirIfNotExits(IMAGE_TABLE_DIR);
 

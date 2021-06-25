@@ -36,8 +36,13 @@ export default async () => {
   const oneDayChangesData = getOneDayChangesTableData(fileDataJSON);
   if (!oneDayChangesData) return;
 
+  const { tickersDataWithHighestGrowthRate, tickersDataWithHighestNegativeGrowthRate } = oneDayChangesData;
+
   // 3. Создаем изображение (таблицу) с ТОПом изменений котировок за день
-  await createImageTableWithDayChangesData(oneDayChangesData);
+  await createImageTableWithDayChangesData({
+    tickersDataWithHighestGrowthRate,
+    tickersDataWithHighestNegativeGrowthRate
+  });
 
   // 4. Отправляем в телеграме сообщение с картинкой (таблицей)
   await sendOneDayChageTableImageToTelegram();

@@ -4,12 +4,15 @@ import { IAvaliableTickerName, IStocksSavedToFileObjectItem, StocksFileDataJSON 
 /**
  * Ограничиваем количество выводимых в результате элементов (с прибылью и с убытком отдельно)
  */
-const RESPONSE_ITEMS_LIMIT = 5;
+const RESPONSE_ITEMS_LIMIT = 10;
 
 /**
  * Формирует итоговые данные, по которым будет отрисована таблица с топ-изменений за день
  */
-export const getOneDayChangesTableData = (fileDataJson: StocksFileDataJSON) => {
+export const getOneDayChangesTableData: (fileDataJson: StocksFileDataJSON) => {
+  tickersDataWithHighestGrowthRate: OneDayChangesData[],
+  tickersDataWithHighestNegativeGrowthRate: OneDayChangesData[],
+} = (fileDataJson: StocksFileDataJSON) => {
   /**
    * Оставляем только те данные, где есть два временных промежутка
    */
@@ -23,7 +26,7 @@ export const getOneDayChangesTableData = (fileDataJson: StocksFileDataJSON) => {
    */
   const sortedTickerNames = noEmptyFileDataKeys.sort((firstTickerName: IAvaliableTickerName, secondTickerName: IAvaliableTickerName) => {
     const firstTikerValues = fileDataJson[firstTickerName].values;
-    
+
     const [{ PRICE: firstTikerStartPrice }, { PRICE: firstTikerLastPrice }] = firstTikerValues;
     const firstTickerPriceDiff = getPercentageDiff(firstTikerStartPrice, firstTikerLastPrice);
 
@@ -63,7 +66,7 @@ export const getOneDayChangesTableData = (fileDataJson: StocksFileDataJSON) => {
   /**
    * Добавляем информацию про разницу в стоимости к названию
    */
-  const tickersDataWithHighestGrowthRate = tickersWithHighestGrowthRate.map(tickerName => {
+  const tickersDataWithHighestGrowthRate: OneDayChangesData[] = tickersWithHighestGrowthRate.map(tickerName => {
     const [{ PRICE: startPrice }, { PRICE: lastPrice }] = fileDataJson[tickerName].values as IStocksSavedToFileObjectItem[];
 
     const percentageDiff = getPercentageDiff(startPrice, lastPrice);
@@ -75,7 +78,7 @@ export const getOneDayChangesTableData = (fileDataJson: StocksFileDataJSON) => {
     };
   });
 
-  const tickersDataWithHighestNegativeGrowthRate = tickersWithHighestNegativeGrowthRate.map(tickerName => {
+  const tickersDataWithHighestNegativeGrowthRate: OneDayChangesData[] = tickersWithHighestNegativeGrowthRate.map(tickerName => {
     const [{ PRICE: startPrice }, { PRICE: lastPrice }] = fileDataJson[tickerName].values as IStocksSavedToFileObjectItem[];
 
     const percentageDiff = getPercentageDiff(startPrice, lastPrice);
@@ -87,9 +90,10 @@ export const getOneDayChangesTableData = (fileDataJson: StocksFileDataJSON) => {
     };
   });
 
-  const allTickersData = [...tickersDataWithHighestGrowthRate, ...tickersDataWithHighestNegativeGrowthRate];
-
-  return allTickersData as OneDayChangesData[];
+  return {
+    tickersDataWithHighestGrowthRate,
+    tickersDataWithHighestNegativeGrowthRate,
+  };
 };
 
 export type OneDayChangesData = {
