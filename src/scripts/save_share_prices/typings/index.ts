@@ -11,6 +11,8 @@ export type IAvaliableTickerNameForRussianMarket =
   'SBER' |
   'CHMF' |
   'PHOR' |
+  'AFKS' |
+  'MTSS' |
   'OZON';
 
 export type IAvaliableTickerNameForForeignMarket =

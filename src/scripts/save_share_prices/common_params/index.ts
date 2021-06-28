@@ -132,6 +132,8 @@ export const REQUIRED_TICKERS_FOR_RUSSIAN_COMPANIES: IAvaliableTickerNameForRuss
   'SBER',
   'CHMF',
   'PHOR',
+  'AFKS',
+  'MTSS',
 ];
 
 /**
