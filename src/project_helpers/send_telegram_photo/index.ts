@@ -18,13 +18,26 @@ export type TelegramSendOptions = {
   caption?: string;
 };
 
-export const sendTelegramPhoto = async (photoData: fs.ReadStream, photoOptions: TelegramSendOptions) => {
+export type TelegramSendCustomOptions = {
+  /**
+   * Метод, вызываемый в случае ошибки
+   */
+  onSendError: (error: Error) => void;
+}
+
+export const sendTelegramPhoto = async (photoData: fs.ReadStream, photoOptions: TelegramSendOptions & TelegramSendCustomOptions) => {
+  const onSendError = photoOptions?.onSendError;
+
   return new Promise(resolve => {
     AvdeevStocksBot.sendPhoto(AVDEEV_DENIS_ID, photoData, photoOptions)
       .then(() => {
         resolve(true);
       })
-      .catch(() => {
+      .catch(async (error) => {
+        if (onSendError) {
+          await onSendError(error);
+        }
+
         resolve(true);
       });
   });

@@ -1,12 +1,13 @@
 {
   "name": "moex_api",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "https://github.com/avdeevdenis/moex_api",
   "scripts": {
     "dev": "tsc --watch",
-    "stocks:save_share_prices": "NODE_ENV=dev node src/scripts_runner/save_share_prices",
-    "stocks:check_difference_in_share_prices": "NODE_ENV=dev node src/scripts_runner/check_difference_in_share_prices",
-    "stocks:check_one_day_diff_once": "NODE_ENV=dev node src/scripts_runner/check_one_day_diff_once"
+    "stocks:compare_stocks": "NODE_ENV=dev ts-node src/scripts_runner/compare_stocks/index.ts",
+    "cron:start": "forever start -v -c ts-node ./src/cron_scripts/index.ts",
+    "cron:stop": "forever stop -v -c ts-node ./src/cron_scripts/index.ts",
+    "cron:restart": "npm run cron:stop && npm run cron:start"
   },
   "author": "Avdeev Denis",
   "license": "ISC",

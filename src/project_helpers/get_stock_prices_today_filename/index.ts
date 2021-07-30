@@ -11,7 +11,7 @@ type StockPricesTodayOptions = {
   /**
    * Расширение файла
    */
-  extension: 'json' | 'txt';
+  extension: 'json' | 'txt' | 'png';
 };
 
 export const getToday = () => {

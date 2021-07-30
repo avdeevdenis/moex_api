@@ -18,6 +18,11 @@ type DebugLogOptions = {
    * Если присутствует явная ошибка в сообщении лога - маркируем (чтобы было заметнее)
    */
   isError?: boolean;
+
+  /**
+   * Любые данные для логирования, преобразуются к строке и дописываются к сообщению
+   */
+  data?: Object;
 };
 
 export const debug_log = async (logFilePath: string, logData: string, options?: DebugLogOptions) => {
@@ -43,12 +48,12 @@ export const debug_log = async (logFilePath: string, logData: string, options?: 
 
   await createFileIfNotExists(logFilePath);
 
-  debug_console(logData);
-
   return new Promise(resolve => {
     const preparedLogData = prepareLogData(logData, options);
 
-    appendFile(logFilePath, preparedLogData, (error: Error) => {
+    debug_console(preparedLogData);
+
+    appendFile(logFilePath, preparedLogData, (error: NodeJS.ErrnoException | null) => {
       if (error) {
         debug_console('debug_log appendFile error', error.message);
         resolve(false);
@@ -81,6 +86,11 @@ export const prepareLogData = (logData: string, options?: DebugLogOptions) => {
     preparedLogData = '❌❌❌ ' + logData;
   } else {
     preparedLogData = logData;
+  }
+
+  const data = options?.data;
+  if (data) {
+    preparedLogData += ' Data:`' + JSON.stringify(data) + '`';
   }
 
   return newLine + `[${now}] ` + preparedLogData;
