@@ -18,8 +18,8 @@ export const EXECUTION_LOG_FILEPATH = './src/logs/save_stocks_picture_and_send_t
 /**
  * Путь, куда сохраняется картинка с таблицей результатов
  */
-export const GET_PICTURE_TABLE_FILEPATH = () => {
-  const filePath = getStockPricesTodayFileName({ pathStart: './src/raw_data/save_stocks_picture_and_send_telegram', extension: 'png' });
+export const GET_PICTURE_TABLE_FILEPATH = (market, period) => {
+  const filePath = getStockPricesTodayFileName({ pathStart: './src/raw_data/save_stocks_picture_and_send_telegram', extension: 'png', pathEnd: `_${market}_${period}` });
 
   return filePath;
 };
@@ -86,10 +86,12 @@ export default async (options: StocksDataInput) => {
 
   await createTemplarePicture({
     htmlTemplate,
-    count: requiredDiff.length
+    count: requiredDiff.length,
+    market,
+    period,
   });
 
-  const imageStream = fs.createReadStream(GET_PICTURE_TABLE_FILEPATH());
+  const imageStream = fs.createReadStream(GET_PICTURE_TABLE_FILEPATH(market, period));
 
   await debug_log(EXECUTION_LOG_FILEPATH, '[save_stocks_picture_and_send_telegram] sendTelegramPhoto start.');
 
@@ -119,7 +121,7 @@ export default async (options: StocksDataInput) => {
 
 export const ROW_HEIGHT = 41;
 
-export const createTemplarePicture = async ({ htmlTemplate, count }) => {
+export const createTemplarePicture = async ({ htmlTemplate, count, market, period }) => {
   const browser = await puppeteer.launch();
 
   await debug_log(EXECUTION_LOG_FILEPATH, '[save_stocks_picture_and_send_telegram] createTemplarePicture puppeteer new page (2).');
@@ -147,7 +149,7 @@ export const createTemplarePicture = async ({ htmlTemplate, count }) => {
 
   await debug_log(EXECUTION_LOG_FILEPATH, '[save_stocks_picture_and_send_telegram] createTemplarePicture puppeteer screenshot (5).');
 
-  await page.screenshot({ path: GET_PICTURE_TABLE_FILEPATH() });
+  await page.screenshot({ path: GET_PICTURE_TABLE_FILEPATH(market, period) });
 
   await debug_log(EXECUTION_LOG_FILEPATH, '[save_stocks_picture_and_send_telegram] createTemplarePicture puppeteer browser close (6).');
 
@@ -155,12 +157,16 @@ export const createTemplarePicture = async ({ htmlTemplate, count }) => {
 };
 
 const getRows = (oneDayDiff) => {
-  const toRounded = (number) => {
-    return +number.toFixed(3);
+  const toRounded = (number, period = 3) => {
+    return +number.toFixed(period);
   };
 
-  let totalPercentageSum = oneDayDiff.reduce((sum, diff) => sum + diff._PERCENTAGE_DIFF, 0);
-  totalPercentageSum = toRounded(totalPercentageSum);
+  const totalOpenSum = oneDayDiff.reduce((sum, diff) => sum + diff.OPEN, 0);
+  const totalLastSum = oneDayDiff.reduce((sum, diff) => sum + diff.LAST, 0);
+
+  let totalPercentageSum = totalLastSum * 100 / totalOpenSum - 100;
+  totalPercentageSum = toRounded(totalPercentageSum, 2);
+
   const totalPercentageSumTrand = totalPercentageSum >= 0;
 
   const totalPercentageSumString = totalPercentageSumTrand ? ('+' + totalPercentageSum) : totalPercentageSum;

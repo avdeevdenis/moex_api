@@ -10,7 +10,7 @@ export const saveCronLaunch = (message: string) => {
   const now = DateTime.now().setZone('Europe/Moscow').toString();
   const appendData = `\n[${now}] [cron_script] launch ${message}.`;
 
-  fs.appendFile('src/logs/cron_launches/launches.txt', appendData, (err: Error) => {
+  fs.appendFile('src/logs/cron_launches.txt', appendData, (err: Error) => {
     if (err) {
       debug_console('saveCronLaunch error.' + err.message);
       return;

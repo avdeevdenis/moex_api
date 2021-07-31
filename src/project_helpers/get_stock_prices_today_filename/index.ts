@@ -9,6 +9,10 @@ type StockPricesTodayOptions = {
    */
   pathStart?: string;
   /**
+   * Добавляется в конце к названию файла
+   */
+  pathEnd?: string;
+  /**
    * Расширение файла
    */
   extension: 'json' | 'txt' | 'png';
@@ -30,10 +34,10 @@ export const getToday = () => {
   return today;
 };
 
-export const getStockPricesTodayFileName = ({ pathStart, extension }: StockPricesTodayOptions) => {
+export const getStockPricesTodayFileName = ({ pathStart, extension, pathEnd = '' }: StockPricesTodayOptions) => {
   const filename = getToday();
 
   const pathName = pathStart ? pathStart + '/' : '';
 
-  return pathName + filename + '.' + extension;
+  return pathName + filename + pathEnd + '.' + extension;
 };

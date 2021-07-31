@@ -55,5 +55,32 @@ cron.schedule(ONLY_EVENING_REPEAT_INTERVAL, async () => {
   /**
    * Сохраняем запуск крона для мониторинга
    */
-  await saveCronLaunch('CHECK_ONE_DAY_DIFF_ONCE');
+  await saveCronLaunch('CHECK_ONE_DAY_DIFF_EVENING');
+});
+
+/**
+ * Запускам отправку статистики за неделю один раз в субботу в 13:00
+ */
+const SATURDAY_REPEAT_INTERVAL = '0 10 * * 6';
+
+cron.schedule(SATURDAY_REPEAT_INTERVAL, async () => {
+  await save_stocks_picture_and_send_telegram({
+    market: 'RUS',
+    period: 'WEEK'
+  });
+
+  await save_stocks_picture_and_send_telegram({
+    market: 'FOREIGN',
+    period: 'WEEK'
+  });
+
+  await save_stocks_picture_and_send_telegram({
+    market: 'FUNDS',
+    period: 'WEEK'
+  });
+
+  /**
+   * Сохраняем запуск крона для мониторинга
+   */
+  await saveCronLaunch('CHECK_ONE_WEEK_DIFF_EVENING');
 });
