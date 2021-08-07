@@ -7,10 +7,10 @@ const cron = require('node-cron');
 
 // Оставляем для тестирования
 // const DAILY_REPEAT_INTERVALS = '*/5 * * * * *';
-const DAILY_REPEAT_INTERVALS = '*/5 4-20 * * 1-5';
+const DAILY_REPEAT_INTERVALS = '*/5 7-20 * * 1-5';
 
 /**
- * Время работы cron-скрипта  - каждые 5 минут с 7:00 до 23:00 пт-пт включительно
+ * Время работы cron-скрипта  - каждые 5 минут с 10:00 до 23:00 пт-пт включительно
  * (важно не забыть UTC+3)
  */
 cron.schedule(DAILY_REPEAT_INTERVALS, async () => {
@@ -59,9 +59,9 @@ cron.schedule(ONLY_EVENING_REPEAT_INTERVAL, async () => {
 });
 
 /**
- * Запускам отправку статистики за неделю один раз в субботу в 13:00
+ * Запускам отправку статистики за неделю один раз в субботу в 11:00
  */
-const SATURDAY_REPEAT_INTERVAL = '0 10 * * 6';
+const SATURDAY_REPEAT_INTERVAL = '0 8 * * 6';
 
 cron.schedule(SATURDAY_REPEAT_INTERVAL, async () => {
   await save_stocks_picture_and_send_telegram({

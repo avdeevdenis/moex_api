@@ -2,8 +2,8 @@ import save_stocks_picture_and_send_telegram from '../../scripts/save_stocks_pic
 
 (async () => {
     await save_stocks_picture_and_send_telegram({
-        market: 'RUS',
-        period: 'YEAR',
+        market: 'FOREIGN',
+        period: 'DAY',
     });
 })();
 

@@ -315,11 +315,11 @@ export const sendTelegramMessages = async (telegramMessages) => {
 /**
  * Возвращает JSON содержимое файла
  */
-export const getFileDataJSON = async (url: string) => {
+export const getFileDataJSON = async (filePath: string) => {
   let fileData;
 
   try {
-    fileData = await fs.readFileSync(url, { encoding: 'utf8' });
+    fileData = await fs.readFileSync(filePath, { encoding: 'utf8' });
   } catch (error) {
     await debug_log(EXECUTION_LOG_FILEPATH, '[compare_stocks] getFileDataJSON readFileSync error.' + error.message, {
       isError: true
@@ -331,9 +331,7 @@ export const getFileDataJSON = async (url: string) => {
   try {
     fileDataJSON = JSON.parse(fileData);
   } catch (error) {
-    await debug_log(EXECUTION_LOG_FILEPATH, '[compare_stocks] getFileDataJSON JSON.parse error.' + error.message, {
-      isError: true
-    });
+    await debug_log(EXECUTION_LOG_FILEPATH, '[compare_stocks] getFileDataJSON JSON.parse error.' + error.message);
   }
 
   return fileDataJSON;
@@ -405,7 +403,6 @@ const REQUIRED_API_TICKERS_RUS = [
   'ALRS',
   'FIVE',
   'AFKS',
-  'VTBR',
   'GAZP',
   'DSKY',
   'IRAO',
@@ -416,8 +413,14 @@ const REQUIRED_API_TICKERS_RUS = [
   'AGRO',
   'HYDR',
   'SBER',
+  'SBERP',
   'PHOR',
   'CHMF',
+  'TCSG',
+  'AKRN',
+  'LSRG',
+  'GMKN',
+  'UPRO',
 ];
 
 /**
@@ -434,6 +437,8 @@ export const REQUIRED_API_TICKERS_FOREIGN = [
   'XOM-RM',
   'INTC-RM',
   'VZ-RM',
+  'MRK-RM',
+  'HPQ-RM',
 ];
 
 /**
@@ -447,19 +452,23 @@ export const REQUIRED_API_TICKERS_FUNDS_TPLUS_USD = [
   'FXUS',
   'FXES',
   'FXTP',
+  'FXIP',
   'FXWO',
-  'TUSD',
+ 
+  'TMOS',
   'TGLD',
   'TECH',
   'TSPX',
   'TBIO',
+
+  'VTBE',
+  'VTBX'
 ];
 
 /**
  * Тикеры фондов, торгующихся в режиме T+, информацию о которых необходимо получить
  */
 export const REQUIRED_API_TICKERS_FUNDS_TPLUS = [
-  'TMOS',
   'FXDE',
   'FXRB',
 ];

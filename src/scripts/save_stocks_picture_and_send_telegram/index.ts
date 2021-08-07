@@ -93,7 +93,9 @@ export default async (options: StocksDataInput) => {
 
   const imageStream = fs.createReadStream(GET_PICTURE_TABLE_FILEPATH(market, period));
 
-  await debug_log(EXECUTION_LOG_FILEPATH, '[save_stocks_picture_and_send_telegram] sendTelegramPhoto start.');
+  await debug_log(EXECUTION_LOG_FILEPATH, '[save_stocks_picture_and_send_telegram] sendTelegramPhoto start.', {
+    data: requiredDiff,
+  });
 
   let periodString = '';
 
